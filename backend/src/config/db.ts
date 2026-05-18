@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { seedDatabase } from './seed';
 
 export const connectDB = async (): Promise<void> => {
   try {
@@ -7,6 +8,9 @@ export const connectDB = async (): Promise<void> => {
       serverSelectionTimeoutMS: 5000,
     });
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+    
+    // Automatically seed user credentials and 18 leads
+    await seedDatabase();
   } catch (error) {
     console.error('❌ MongoDB connection error:', error);
     process.exit(1);
