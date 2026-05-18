@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, Link } from 'react-router-dom';
 import {
   LayoutDashboard,
   Users,
@@ -29,11 +29,13 @@ export const Sidebar: React.FC = () => {
   return (
     <aside className="w-56 h-screen flex flex-col bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-r border-slate-100 dark:border-slate-800 fixed left-0 top-0 z-30 transition-colors duration-300">
       {/* Logo */}
-      <div className="flex items-center gap-2.5 px-5 h-16 border-b border-slate-100 dark:border-slate-800">
-        <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#14b8a6] to-[#2dd4bf] shadow-lg shadow-[#14b8a6]/30 flex items-center justify-center">
-          <Zap size={16} className="text-white" fill="white" />
-        </div>
-        <span className="font-bold text-slate-900 dark:text-white text-base tracking-tight">SmartLeads</span>
+      <div className="h-16 border-b border-slate-100 dark:border-slate-800 flex items-center px-5">
+        <Link to="/dashboard" className="flex items-center gap-2.5 group cursor-pointer">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#14b8a6] to-[#2dd4bf] shadow-lg shadow-[#14b8a6]/30 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+            <Zap size={16} className="text-white" fill="white" />
+          </div>
+          <span className="font-bold text-slate-900 dark:text-white text-base tracking-tight group-hover:text-[#14b8a6] dark:group-hover:text-[#2dd4bf] transition-colors duration-200">SmartLeads</span>
+        </Link>
       </div>
 
       {/* Navigation */}
