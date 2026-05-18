@@ -1,12 +1,8 @@
-<div align="center">
-  <img src="https://raw.githubusercontent.com/HariniPrithiyangara/smartlead/main/frontend/public/favicon.svg" alt="SmartLeads Logo" width="80" height="80">
-  <h1>SmartLeads CRM</h1>
-  <p>A modern, production-ready AI-powered Lead Management System built with the MERN stack.</p>
-  
-  <a href="https://smartlead-five.vercel.app" target="_blank">
-    <img src="https://img.shields.io/badge/Live_Demo-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
-  </a>
-</div>
+# 🚀 Harini Prithiyangara B - SmartLeads CRM
+
+[![Live Demo](https://img.shields.io/badge/LIVE_DEMO-SMARTLEAD--FIVE.VERCEL.APP-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://smartlead-five.vercel.app)
+
+A production-grade, highly optimized Lead Management CRM built with the MERN stack and Tailwind CSS. Featuring seamless AI-powered workflows, responsive glassmorphism UI, and enterprise-level backend API routes.
 
 <br />
 
