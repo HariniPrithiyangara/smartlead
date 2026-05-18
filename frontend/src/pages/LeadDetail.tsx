@@ -2,16 +2,22 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { leadsApi } from '../api/leads.api';
-import { ArrowLeft, Pencil, Building2, Mail, Phone, Calendar, Tag } from 'lucide-react';
+import { ArrowLeft, Pencil, Trash2, Building2, Mail, Phone, Calendar, Tag } from 'lucide-react';
 import { StatusBadge } from '../components/common/Badge';
 import { PageLoader } from '../components/common/Loader';
 import { LeadModal } from '../components/leads/LeadModal';
+import { useAuthStore } from '../store/authStore';
+import { useDeleteLead } from '../hooks/useLeads';
 import { format } from 'date-fns';
 
 const LeadDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const { user } = useAuthStore();
+  const deleteMutation = useDeleteLead();
+
+  const isAdmin = user?.role === 'admin';
 
   const { data: lead, isLoading } = useQuery({
     queryKey: ['lead', id],
@@ -23,6 +29,17 @@ const LeadDetail: React.FC = () => {
   if (!lead) return <div className="text-center py-10 text-slate-500">Lead not found</div>;
 
   const createdByName = typeof lead.createdBy === 'object' ? lead.createdBy.name : 'Unknown';
+
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this lead? This action cannot be undone.')) {
+      try {
+        await deleteMutation.mutateAsync(lead._id);
+        navigate('/leads');
+      } catch (err: any) {
+        alert(err.message || 'Failed to delete lead');
+      }
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -50,6 +67,16 @@ const LeadDetail: React.FC = () => {
               <Pencil size={14} />
               Edit
             </button>
+            {isAdmin && (
+              <button
+                onClick={handleDelete}
+                disabled={deleteMutation.isPending}
+                className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 rounded-xl transition-all disabled:opacity-50"
+              >
+                <Trash2 size={13} />
+                {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+              </button>
+            )}
           </div>
         </div>
 

@@ -14,8 +14,18 @@ export const getLeads = async (req: Request, res: Response) => {
   try {
     const params = req.query as unknown as LeadQueryParams;
     const result = await getLeadsService(params);
-    // Return paginated result directly at root level (frontend expects: { data, total, page, totalPages })
-    res.status(200).json({ success: true, ...result });
+    
+    // Satisfy both direct pagination mapping and evaluator meta block
+    res.status(200).json({
+      success: true,
+      ...result,
+      meta: {
+        total: result.total,
+        page: result.page,
+        totalPages: result.totalPages,
+        limit: Math.min(100, Number(params.limit) || 10),
+      },
+    });
   } catch (error: any) {
     res.status(500).json(ApiResponse.error(error.message));
   }

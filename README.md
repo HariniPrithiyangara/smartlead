@@ -20,11 +20,32 @@ Through this project, I engineered a complete, type-safe full-stack application 
 
 ## Table of Contents
 
+- [Live Links](#-live-links)
+- [Test Credentials](#-test-credentials)
 - [Installation](#installation)
+- [Docker Setup](#-docker-setup)
 - [Usage](#usage)
+- [API Endpoints](#-api-endpoints)
 - [Features](#features)
 - [Credits](#credits)
 - [License](#license)
+
+## 🚀 Live Links
+
+- **Frontend (Vercel):** [https://smartlead-five.vercel.app](https://smartlead-five.vercel.app)
+- **Backend (Render):** [https://smartlead-kpo7.onrender.com](https://smartlead-kpo7.onrender.com)
+- **Database (Atlas):** MongoDB Cloud Sandbox
+
+## 🔑 Test Credentials
+
+For quick evaluation, use these pre-seeded test user accounts:
+
+| Role | Email | Password | Permissions |
+| :--- | :--- | :--- | :--- |
+| **Admin** | `admin@smartleads.com` | `admin123` | Full access (Add, Edit, Delete, Stats, CSV) |
+| **Sales Rep** | `sales@smartleads.com` | `sales123` | Limited access (Add, Edit, View, Stats, **Delete Hidden**) |
+
+---
 
 ## Installation
 
@@ -73,6 +94,24 @@ npm run dev
 
 ---
 
+## 🐳 Docker Setup
+
+This project is fully containerized for standard orchestrations. You can spin up the entire MERN stack locally with a single command:
+
+1. **Verify your environment variable files:**
+   Ensure `backend/.env` exists (or copy it from `backend/.env.example`). Docker Compose will read MONGODB_URI directly from the internal bridge network (`mongodb://mongo:27017/smartleads`).
+
+2. **Launch MERN container clusters:**
+   ```bash
+   docker-compose up --build
+   ```
+   This compiles the optimized production Docker images and spins up:
+   * **Database:** MongoDB 7 on port `27017`
+   * **Backend:** Express API on port `5000`
+   * **Frontend:** Nginx Serving Vite client on port `3000`
+
+---
+
 ## Usage
 
 Once both servers are running, open your browser to `http://localhost:5173`.
@@ -83,6 +122,24 @@ Once both servers are running, open your browser to `http://localhost:5173`.
 3. **Manage Leads:** Navigate to the **Leads** tab to add a new lead, edit existing details, or delete leads (Admin only).
 4. **Generate AI Messages:** Edit any lead, click **✨ Generate AI Follow-up Message**, and choose **Email** or **WhatsApp** to contact the client instantly with high-conversion copy.
 5. **Data Export:** Click **Export to CSV** to instantly download full pipelines for internal reporting.
+
+---
+
+## 📝 API Endpoints
+
+All core API routing paths are strictly RESTful, type-safe, and secured:
+
+| Method | Path | Auth | Description | Req. Body / Response |
+| :--- | :--- | :--- | :--- | :--- |
+| **POST** | `/api/auth/register` | Public | Registers a new Sales/Admin user | `{ name, email, password, role }` |
+| **POST** | `/api/auth/login` | Public | Standard user authentication | `{ email, password }` ➡️ returns JWT token |
+| **GET** | `/api/leads` | JWT | Fetch paginated leads list with query filters | Supports `?page=1&limit=10&search=Rahul&status=Qualified` |
+| **GET** | `/api/leads/stats` | JWT | Get real-time metric analytics aggregates | Returns pipeline count status metrics |
+| **GET** | `/api/leads/:id` | JWT | View specific lead detailed model fields | Returns detailed model payload |
+| **POST** | `/api/leads` | JWT | Create a new lead record | `{ name, email, status, source, company, phone }` |
+| **PUT** | `/api/leads/:id` | JWT | Update active lead metadata values | Updates specific field properties |
+| **DELETE**| `/api/leads/:id` | JWT + Admin | Permadelete a lead (RBAC enforced) | Restricts and rejects non-admin users (`403 Forbidden`) |
+| **POST** | `/api/leads/:id/ai-followup`| JWT | Generate personalized sales copy (Gemini) | AI reads lead profile context, yields sales hooks |
 
 ---
 
